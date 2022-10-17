@@ -3,10 +3,29 @@ import axios from 'axios'
 
 function App() {
 
-  //const url = 'https://api.openweathermap.org/data/2.5/weather?q=miami&appid=6733cc0c086c9effdbdf57b0293ff7a3'
+  const[data, setData] = useState({});
+  const[location, setLocation] = useState('');
+  const url = 'https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=6733cc0c086c9effdbdf57b0293ff7a3';
+
+  const searchLocation = (event) => {
+    if (event.key === 'Enter') {
+      axios.get(url).then((response) => {
+        setData(response.data);
+        console.log(response.data)
+      })
+    }
+  }
 
   return (
     <div className="app">
+      <div className='search'>
+        <input
+        value={location}
+        onChange={event => setLocation(event.target.value)}
+        onKeyPress={searchLocation}
+        placeholder='Enter Location'
+        type='text'></input>
+      </div>
       <div className='container'>
         <div className='top'>
           <div className='location'>
@@ -21,13 +40,16 @@ function App() {
         </div>
         <div className='bottom'>
           <div className='feels'>
-            <p>70°</p>
+            <p className='bold'>70°</p>
+            <p>Feels Like</p>
           </div>
           <div className='humidity'>
-            <p>30%</p>
+            <p className='bold'>30%</p>
+            <p>Humidity</p>
           </div>
           <div className='wind'>
-            <p>15 MPH</p>
+            <p className='bold'>15 MPH</p>
+            <p>Wind</p>
           </div>
         </div>
       </div>
