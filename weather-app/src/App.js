@@ -5,16 +5,18 @@ function App() {
 
   const[data, setData] = useState({});
   const[location, setLocation] = useState('');
-  const url = 'https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=';
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=INSERT_YOUR_API_KEY_HERE`;
 
   const searchLocation = (event) => {
     if (event.key === 'Enter') {
       axios.get(url).then((response) => {
-        setData(response.data);
+        setData(response.data)
         console.log(response.data)
       })
+      setLocation('')
     }
   }
+
 
   return (
     <div className="app">
@@ -23,32 +25,33 @@ function App() {
         value={location}
         onChange={event => setLocation(event.target.value)}
         onKeyPress={searchLocation}
+        data-city-search
         placeholder='Enter Location'
         type='text'></input>
       </div>
       <div className='container'>
         <div className='top'>
           <div className='location'>
-            <p>Miami</p>
+            <p>{data.name}</p>
           </div>
           <div className='temp'>
-            <h1>65°F</h1>
+            <h1>{data.main.temp.toFixed()}°F</h1>
           </div>
           <div className='description'>
-            <p>Clouds</p>
+            {data.weather ? <p>{data.weather[0].main}</p> : null}
           </div>
         </div>
         <div className='bottom'>
           <div className='feels'>
-            <p className='bold'>70°</p>
+            {data.main ? <p className='bold'>{data.main.feels_like.toFixed()}°F</p> : null}
             <p>Feels Like</p>
           </div>
           <div className='humidity'>
-            <p className='bold'>30%</p>
+          {data.main ? <p className='bold'>{data.main.humidity}%</p> : null}
             <p>Humidity</p>
           </div>
           <div className='wind'>
-            <p className='bold'>15 MPH</p>
+            {data.wind ? <p className='bold'>{data.wind.speed.toFixed()} MPH</p> : null }
             <p>Wind</p>
           </div>
         </div>
